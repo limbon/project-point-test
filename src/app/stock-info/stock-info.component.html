@@ -1,1 +1,5 @@
-<p>stock-info works!</p>
+<dx-data-grid
+  [dataSource]="symbols"
+  keyExpr="symbol"
+  [loadPanel]="{ enabled: true }"
+></dx-data-grid>

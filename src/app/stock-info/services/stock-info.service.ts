@@ -1,6 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import {
+  CompanyInfo,
+  GetSymbolsResponse,
+  StockSymbol,
+} from '../stock-info.interface';
 
 type StockResolution = '1' | '5' | '15' | '30' | '60' | 'D' | 'W' | 'M';
 
@@ -9,12 +14,27 @@ export class StockInfoService {
   constructor(private readonly httpClient: HttpClient) {}
 
   getSymbols(query?: string) {
-    return this.httpClient.get('https://finnhub.io/api/v1/search', {
-      params: {
-        token: environment.finnhubApiKey,
-        q: query || '',
-      },
-    });
+    return this.httpClient.get<GetSymbolsResponse>(
+      'https://finnhub.io/api/v1/search',
+      {
+        params: {
+          token: environment.finnhubApiKey,
+          q: query || '',
+        },
+      }
+    );
+  }
+
+  getCompanyInfo(symbol: string) {
+    return this.httpClient.get<CompanyInfo>(
+      'https://finnhub.io/api/v1/stock/profile2',
+      {
+        params: {
+          token: environment.finnhubApiKey,
+          symbol,
+        },
+      }
+    );
   }
 
   getCandlesForSymbol(
