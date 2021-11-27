@@ -1,0 +1,49 @@
+<dx-load-indicator *ngIf="loading"></dx-load-indicator>
+
+<div *ngIf="!company && !loading">No Data</div>
+
+<div class="company-info" *ngIf="company" [hidden]="loading">
+  <img class="logo" [src]="company.logo" (load)="onLogoLoad()" />
+  <div class="fields">
+    <div class="field">
+      <span>Name: </span>
+      <span>{{ company.name }}</span>
+    </div>
+    <div class="field">
+      <span>Country: </span>
+      <span>{{ company.country }}</span>
+    </div>
+    <div class="field">
+      <span>Currency: </span>
+      <span>{{ company.currency }}</span>
+    </div>
+    <div class="field">
+      <span>IPO: </span>
+      <span>{{ company.ipo | date }}</span>
+    </div>
+    <div class="field">
+      <span>Market Capitalization: </span>
+      <span>{{ company.marketCapitalization | currency }}</span>
+    </div>
+    <div class="field">
+      <span>Phone: </span>
+      <span>{{ (company.phone | phone: company.country) || "-" }}</span>
+    </div>
+    <div class="field">
+      <span>Share Outstanding: </span>
+      <span>{{ company.shareOutstanding }}</span>
+    </div>
+    <div class="field">
+      <span>Ticker: </span>
+      <span>{{ company.ticker }}</span>
+    </div>
+    <div class="field">
+      <span>URL: </span>
+      <a [href]="company.weburl">{{ company.weburl }}</a>
+    </div>
+    <div class="field">
+      <span>Finnhub Industry: </span>
+      <span>{{ company.finnhubIndustry }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+.company-info {
+  display: flex;
+
+  &[hidden] {
+    display: none;
+  }
+
+  .logo {
+    height: min-content;
+  }
+
+  .fields {
+    margin-left: 16px;
+  }
+}

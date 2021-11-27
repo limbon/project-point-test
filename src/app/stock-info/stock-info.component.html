@@ -2,4 +2,16 @@
   [dataSource]="symbols"
   keyExpr="symbol"
   [loadPanel]="{ enabled: true }"
-></dx-data-grid>
+  [remoteOperations]="true"
+>
+  <dxo-search-panel [visible]="true"></dxo-search-panel>
+  <dxo-master-detail
+    [enabled]="true"
+    template="stockSymbols"
+  ></dxo-master-detail>
+  <div *dxTemplate="let detailItem of 'stockSymbols'">
+    <app-test-company-info
+      [symbol]="detailItem.data.displaySymbol"
+    ></app-test-company-info>
+  </div>
+</dx-data-grid>
