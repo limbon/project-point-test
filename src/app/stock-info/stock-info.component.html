@@ -1,17 +1,29 @@
-<dx-data-grid
-  [dataSource]="symbols"
-  keyExpr="symbol"
-  [loadPanel]="{ enabled: true }"
-  [remoteOperations]="true"
->
-  <dxo-search-panel [visible]="true"></dxo-search-panel>
-  <dxo-master-detail
-    [enabled]="true"
-    template="stockSymbols"
-  ></dxo-master-detail>
-  <div *dxTemplate="let detailItem of 'stockSymbols'">
-    <app-test-company-info
-      [symbol]="detailItem.data.displaySymbol"
-    ></app-test-company-info>
+<div class="page">
+  <div class="selected-symbol" *ngIf="selectedSymbol">
+    <app-test-candles
+      [symbol]="selectedSymbol.displaySymbol"
+      [title]="selectedSymbol.description"
+    ></app-test-candles>
   </div>
-</dx-data-grid>
+  <div class="symbol-table">
+    <dx-data-grid
+      keyExpr="symbol"
+      [dataSource]="symbols"
+      [loadPanel]="{ enabled: true }"
+      [remoteOperations]="true"
+      (onRowClick)="onSymbolSelect($event)"
+    >
+      <dxo-selection mode="single"></dxo-selection>
+      <dxo-search-panel [visible]="true"></dxo-search-panel>
+      <dxo-master-detail
+        [enabled]="true"
+        template="stockSymbols"
+      ></dxo-master-detail>
+      <div *dxTemplate="let detailItem of 'stockSymbols'">
+        <app-test-company-info
+          [symbol]="detailItem.data.displaySymbol"
+        ></app-test-company-info>
+      </div>
+    </dx-data-grid>
+  </div>
+</div>

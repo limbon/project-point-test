@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Row } from 'devextreme/ui/data_grid';
 import { StockInfoService } from './services/stock-info.service';
 import { StockSymbol } from './stock-info.interface';
 
@@ -9,6 +10,7 @@ import { StockSymbol } from './stock-info.interface';
 })
 export class StockInfoComponent implements OnInit {
   symbols: StockSymbol[] = [];
+  selectedSymbol: StockSymbol;
 
   constructor(private readonly stockInfoService: StockInfoService) {}
 
@@ -20,5 +22,9 @@ export class StockInfoComponent implements OnInit {
 
   getCompanyInfo(stockSymbol: StockSymbol) {
     return this.stockInfoService.getCompanyInfo(stockSymbol.symbol);
+  }
+
+  onSymbolSelect(item: Row<StockSymbol>) {
+    this.selectedSymbol = item.data;
   }
 }

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { getUnixTime } from 'date-fns';
 import { environment } from '../../../environments/environment';
 import {
+  CandleInfoResponse,
   CompanyInfo,
   GetSymbolsResponse,
-  StockSymbol,
+  StockResolution,
 } from '../stock-info.interface';
-
-type StockResolution = '1' | '5' | '15' | '30' | '60' | 'D' | 'W' | 'M';
 
 @Injectable({ providedIn: 'root' })
 export class StockInfoService {
@@ -43,14 +43,17 @@ export class StockInfoService {
     from: Date,
     to: Date
   ) {
-    return this.httpClient.get('https://finnhub.io/api/v1/candle', {
-      params: {
-        token: environment.finnhubApiKey,
-        symbol,
-        resolution,
-        from: from.getTime(),
-        to: to.getTime(),
-      },
-    });
+    return this.httpClient.get<CandleInfoResponse>(
+      'https://finnhub.io/api/v1/stock/candle',
+      {
+        params: {
+          token: environment.finnhubApiKey,
+          symbol,
+          resolution,
+          from: getUnixTime(from),
+          to: getUnixTime(to),
+        },
+      }
+    );
   }
 }

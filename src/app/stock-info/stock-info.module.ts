@@ -4,6 +4,7 @@ import { StockInfoComponent } from './stock-info.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DxDataGridModule } from 'devextreme-angular';
 import { CompanyInfoModule } from './components/company-info/company-info.module';
+import { CandlesModule } from './components/candles/candles.module';
 
 @NgModule({
   declarations: [StockInfoComponent],
@@ -12,6 +13,7 @@ import { CompanyInfoModule } from './components/company-info/company-info.module
     HttpClientModule,
     DxDataGridModule,
     CompanyInfoModule,
+    CandlesModule,
   ],
   exports: [StockInfoComponent],
 })
