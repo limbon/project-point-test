@@ -40,6 +40,10 @@ export class CandlesComponent implements OnChanges {
 
   getCandles() {
     this.loading = true;
+
+    //  To make DevExtreme show the loading indicator
+    this.data = null as any;
+
     this.stockInfoService
       .getCandlesForSymbol(
         this.symbol,
