@@ -1,12 +1,9 @@
 .page {
   display: flex;
-  padding: 8px;
+  padding: 1rem;
 
   .selected-symbol {
     flex: 1;
-    position: sticky;
-    top: 0;
-    height: max-content;
   }
 
   .symbol-table {

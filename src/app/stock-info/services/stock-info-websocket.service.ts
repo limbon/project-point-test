@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map } from 'lodash';
-import { filter, Observable, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, filter, of, Subject, switchMap, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   StockInfoWebsocketEvent,
@@ -11,7 +10,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class StockInfoWebsocket {
   private events$ = new Subject<StockInfoWebsocketEventPayload<any>>();
-  private isReady$ = new Subject<boolean>();
+  private isOpen$ = new BehaviorSubject<boolean>(false);
 
   private socket = new WebSocket(
     `wss://ws.finnhub.io?token=${environment.finnhubApiKey}`
@@ -20,7 +19,7 @@ export class StockInfoWebsocket {
   constructor() {
     this.socket.onopen = () => {
       this.socket.onmessage = this.onMessage.bind(this);
-      this.isReady$.next(true);
+      this.isOpen$.next(true);
     };
   }
 
@@ -34,8 +33,15 @@ export class StockInfoWebsocket {
   on<E extends StockInfoWebsocketEvent>(
     ...data: StockInfoWebsocketEventMessage<E>[]
   ) {
-    return this.isReady$.pipe(
-      filter((isReady) => !!isReady),
+    if (this.isOpen$.getValue()) {
+      data.forEach((value) => {
+        this.socket.send(JSON.stringify(value));
+      });
+      return this.events$.asObservable();
+    }
+
+    return this.isOpen$.pipe(
+      filter((isReady) => isReady),
       tap(() => {
         data.forEach((value) => {
           this.socket.send(JSON.stringify(value));
@@ -46,14 +52,22 @@ export class StockInfoWebsocket {
   }
 
   off(...symbols: string[]) {
-    return this.isReady$.pipe(
-      filter((isReady) => !!isReady),
+    if (this.isOpen$.getValue()) {
+      symbols.forEach((symbol) => {
+        this.socket.send(JSON.stringify({ type: 'unsubscribe', symbol }));
+      });
+
+      return this.events$.asObservable();
+    }
+
+    return this.isOpen$.pipe(
+      filter((isReady) => isReady),
       tap(() => {
         symbols.forEach((symbol) => {
           this.socket.send(JSON.stringify({ type: 'unsubscribe', symbol }));
         });
       }),
-      switchMap(() => this.events$.asObservable())
+      switchMap(() => of())
     );
   }
 }

@@ -1,8 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { fromUnixTime } from 'date-fns';
-import { map, switchMap, tap } from 'rxjs';
+import { concatMap, exhaustMap, filter, map, of, switchMap, tap } from 'rxjs';
 import { StockInfoWebsocket } from '../../services/stock-info-websocket.service';
 import { StockInfoService } from '../../services/stock-info.service';
+import { fromUnixTime } from 'date-fns';
+import { StockInfoPriceChangePayload } from '../../stock-info.interface';
 
 @Component({
   selector: 'app-test-price-updates',
@@ -24,11 +25,6 @@ export class PriceUpdatesComponent implements OnChanges {
     this.loading = true;
     this.data = [];
 
-    if (changes['symbol'].previousValue) {
-      const [previousSymbol] = changes['symbol'].previousValue.split('/');
-      this.stockInfoWebsocket.off(previousSymbol).subscribe();
-    }
-
     this.stockInfoService
       .getQuoteForSymbol(this.symbol)
       .pipe(
@@ -39,21 +35,32 @@ export class PriceUpdatesComponent implements OnChanges {
           }
           this.loading = false;
         }),
+        switchMap((value) => {
+          if (changes['symbol'].previousValue) {
+            const previousSymbol = changes['symbol'].previousValue;
+            return this.stockInfoWebsocket.off(previousSymbol);
+          }
+          return of(value);
+        }),
         switchMap(() =>
           this.stockInfoWebsocket
             .on({ type: 'subscribe', symbol: this.symbol })
             .pipe(
+              filter((result) => !!result),
               map((result) =>
-                result.data.map((value) => ({
-                  p: value.p,
-                  t: fromUnixTime(value.t),
-                }))
+                (result as StockInfoPriceChangePayload).data
+                  .filter((value) => value.s === this.symbol)
+                  .map((value) => {
+                    const date = new Date();
+                    date.setTime(value.t);
+                    return { p: value.p, t: date };
+                  })
               )
             )
         )
       )
       .subscribe((values) => {
-        this.data = [...values, ...this.data];
+        this.data = [...this.data, ...values];
       });
   }
 }

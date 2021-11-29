@@ -1,15 +1,14 @@
-<dx-data-grid [dataSource]="data" [remoteOperations]="true">
-  <dxo-load-panel [enabled]="true"></dxo-load-panel>
-  <dxi-column
-    format="currency"
-    dataType="number"
-    dataField="p"
-    caption="Price"
-  ></dxi-column>
-  <dxi-column
-    format="shortDate"
-    dataType="date"
-    dataField="t"
-    caption="Date"
-  ></dxi-column>
-</dx-data-grid>
+<dx-chart [resizePanesOnZoom]="true" [dataSource]="data">
+  <dxo-animation [enabled]="false"></dxo-animation>
+  <dxo-tooltip [enabled]="true"></dxo-tooltip>
+  <dxi-series valueField="p" name="Price"> </dxi-series>
+  <dxo-loading-indicator [enabled]="!data.length"></dxo-loading-indicator>
+  <dxo-title text="Trades"> </dxo-title>
+  <dxo-common-series-settings argumentField="t"> </dxo-common-series-settings>
+  <dxo-argument-axis
+    [valueMarginsEnabled]="false"
+    discreteAxisDivisionMode="crossLabels"
+  >
+    <dxo-grid [visible]="true"></dxo-grid>
+  </dxo-argument-axis>
+</dx-chart>

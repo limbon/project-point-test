@@ -20,7 +20,7 @@ export class CompanyInfoComponent implements OnInit {
     this.stockInfoService.getCompanyInfo(this.symbol).subscribe((company) => {
       if (!!Object.keys(company).length) {
         this.company = company;
-
+        
         if (!company.logo) {
           this.loading = false;
         }
