@@ -21,19 +21,17 @@ export class PriceUpdatesComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    const [symbol] = this.symbol.split('/');
-
     this.loading = true;
+    this.data = [];
+
+    if (changes['symbol'].previousValue) {
+      const [previousSymbol] = changes['symbol'].previousValue.split('/');
+      this.stockInfoWebsocket.off(previousSymbol).subscribe();
+    }
+
     this.stockInfoService
-      .getQuoteForSymbol(symbol)
+      .getQuoteForSymbol(this.symbol)
       .pipe(
-        tap(() => {
-          this.data = [];
-          if (changes['symbol'].previousValue) {
-            const [previousSymbol] = changes['symbol'].previousValue.split('/');
-            this.stockInfoWebsocket.off(previousSymbol).subscribe();
-          }
-        }),
         map((value) => ({ p: value.c, t: fromUnixTime(value.t) })),
         tap((quote) => {
           if (quote.p) {
@@ -42,14 +40,16 @@ export class PriceUpdatesComponent implements OnChanges {
           this.loading = false;
         }),
         switchMap(() =>
-          this.stockInfoWebsocket.on({ type: 'subscribe', symbol }).pipe(
-            map((result) =>
-              result.data.map((value) => ({
-                p: value.p,
-                t: fromUnixTime(value.t),
-              }))
+          this.stockInfoWebsocket
+            .on({ type: 'subscribe', symbol: this.symbol })
+            .pipe(
+              map((result) =>
+                result.data.map((value) => ({
+                  p: value.p,
+                  t: fromUnixTime(value.t),
+                }))
+              )
             )
-          )
         )
       )
       .subscribe((values) => {

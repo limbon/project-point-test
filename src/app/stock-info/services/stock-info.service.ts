@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getUnixTime } from 'date-fns';
-import { environment } from '../../../environments/environment';
 import {
   CandleInfoResponse,
   CompanyInfo,
@@ -15,35 +14,20 @@ export class StockInfoService {
   constructor(private readonly httpClient: HttpClient) {}
 
   getSymbols(query?: string) {
-    return this.httpClient.get<GetSymbolsResponse>(
-      'https://finnhub.io/api/v1/search',
-      {
-        params: {
-          token: environment.finnhubApiKey,
-          q: query || '',
-        },
-      }
-    );
+    return this.httpClient.get<GetSymbolsResponse>('search', {
+      params: { q: query || '' },
+    });
   }
 
   getCompanyInfo(symbol: string) {
-    return this.httpClient.get<CompanyInfo>(
-      'https://finnhub.io/api/v1/stock/profile2',
-      {
-        params: {
-          token: environment.finnhubApiKey,
-          symbol,
-        },
-      }
-    );
+    return this.httpClient.get<CompanyInfo>('stock/profile2', {
+      params: { symbol },
+    });
   }
 
   getQuoteForSymbol(symbol: string) {
-    return this.httpClient.get<QuoteInfo>('https://finnhub.io/api/v1/quote', {
-      params: {
-        token: environment.finnhubApiKey,
-        symbol,
-      },
+    return this.httpClient.get<QuoteInfo>('quote', {
+      params: { symbol },
     });
   }
 
@@ -53,17 +37,13 @@ export class StockInfoService {
     from: Date,
     to: Date
   ) {
-    return this.httpClient.get<CandleInfoResponse>(
-      'https://finnhub.io/api/v1/stock/candle',
-      {
-        params: {
-          token: environment.finnhubApiKey,
-          symbol,
-          resolution,
-          from: getUnixTime(from),
-          to: getUnixTime(to),
-        },
-      }
-    );
+    return this.httpClient.get<CandleInfoResponse>('stock/candle', {
+      params: {
+        symbol,
+        resolution,
+        from: getUnixTime(from),
+        to: getUnixTime(to),
+      },
+    });
   }
 }

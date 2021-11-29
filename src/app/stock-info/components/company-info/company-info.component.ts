@@ -17,10 +17,10 @@ export class CompanyInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    const [symbol] = this.symbol.split('/');
-    this.stockInfoService.getCompanyInfo(symbol).subscribe((company) => {
+    this.stockInfoService.getCompanyInfo(this.symbol).subscribe((company) => {
       if (!!Object.keys(company).length) {
         this.company = company;
+
         if (!company.logo) {
           this.loading = false;
         }

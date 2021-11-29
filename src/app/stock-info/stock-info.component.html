@@ -1,11 +1,11 @@
 <div class="page">
   <div class="selected-symbol" *ngIf="selectedSymbol">
     <app-test-candles
-      [symbol]="selectedSymbol.displaySymbol"
+      [symbol]="getSymbolName(selectedSymbol.displaySymbol)"
       [title]="selectedSymbol.description"
     ></app-test-candles>
     <app-test-price-updates
-      [symbol]="selectedSymbol.displaySymbol"
+      [symbol]="getSymbolName(selectedSymbol.displaySymbol)"
     ></app-test-price-updates>
   </div>
   <div class="symbol-table">
@@ -24,7 +24,7 @@
       ></dxo-master-detail>
       <div *dxTemplate="let detailItem of 'stockSymbols'">
         <app-test-company-info
-          [symbol]="detailItem.data.displaySymbol"
+          [symbol]="getSymbolName(detailItem.data.displaySymbol)"
         ></app-test-company-info>
       </div>
     </dx-data-grid>

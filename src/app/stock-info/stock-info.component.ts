@@ -27,4 +27,9 @@ export class StockInfoComponent implements OnInit {
   onSymbolSelect(item: Row<StockSymbol>) {
     this.selectedSymbol = item.data;
   }
+
+  getSymbolName(displaySymbol?: string) {
+    const [symbol] = displaySymbol?.split('/') ?? [];
+    return symbol;
+  }
 }

@@ -3,16 +3,16 @@
     <label for="start-date">Start Date</label>
     <dx-date-box
       id="start-date"
-      [(value)]="fromDate"
-      (onValueChanged)="getData()"
+      [(value)]="startDate"
+      (onValueChanged)="getCandles()"
     ></dx-date-box>
   </div>
   <div class="field">
     <label for="end-date">End Date</label>
     <dx-date-box
       id="end-date"
-      [(value)]="toDate"
-      (onValueChanged)="getData()"
+      [(value)]="endDate"
+      (onValueChanged)="getCandles()"
     ></dx-date-box>
   </div>
   <div class="field">
@@ -23,7 +23,7 @@
       [items]="resolutionOptions"
       displayExpr="label"
       valueExpr="value"
-      (onValueChanged)="getData()"
+      (onValueChanged)="getCandles()"
     ></dx-select-box>
   </div>
 </div>

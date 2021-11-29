@@ -15,10 +15,10 @@ export class CandlesComponent implements OnChanges {
   @Input() title: string;
 
   data: CandleInfo[];
-  loading = false;
 
-  toDate: Date | number | string = new Date();
-  fromDate: Date | number | string = subMonths(this.toDate as Date, 1);
+  loading = false;
+  endDate: Date | number | string = new Date();
+  startDate: Date | number | string = subMonths(this.endDate as Date, 1);
   resolution: StockResolution = 'D';
 
   resolutionOptions: Array<{ label: string; value: StockResolution }> = [
@@ -35,18 +35,17 @@ export class CandlesComponent implements OnChanges {
   constructor(private readonly stockInfoService: StockInfoService) {}
 
   ngOnChanges(): void {
-    this.getData();
+    this.getCandles();
   }
 
-  getData() {
-    const [symbol] = this.symbol.split('/');
+  getCandles() {
     this.loading = true;
     this.stockInfoService
       .getCandlesForSymbol(
-        symbol,
+        this.symbol,
         this.resolution,
-        this.fromDate as Date,
-        this.toDate as Date
+        this.startDate as Date,
+        this.endDate as Date
       )
       .pipe(
         map((response) =>
