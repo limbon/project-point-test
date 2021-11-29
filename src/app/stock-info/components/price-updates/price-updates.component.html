@@ -1,0 +1,15 @@
+<dx-data-grid [dataSource]="data" [remoteOperations]="true">
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+  <dxi-column
+    format="currency"
+    dataType="number"
+    dataField="p"
+    caption="Price"
+  ></dxi-column>
+  <dxi-column
+    format="shortDate"
+    dataType="date"
+    dataField="t"
+    caption="Date"
+  ></dxi-column>
+</dx-data-grid>

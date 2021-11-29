@@ -4,6 +4,9 @@
       [symbol]="selectedSymbol.displaySymbol"
       [title]="selectedSymbol.description"
     ></app-test-candles>
+    <app-test-price-updates
+      [symbol]="selectedSymbol.displaySymbol"
+    ></app-test-price-updates>
   </div>
   <div class="symbol-table">
     <dx-data-grid
@@ -13,7 +16,7 @@
       [remoteOperations]="true"
       (onRowClick)="onSymbolSelect($event)"
     >
-      <dxo-selection mode="single"></dxo-selection>
+      <dxo-selection mode="single" [deferred]="true"></dxo-selection>
       <dxo-search-panel [visible]="true"></dxo-search-panel>
       <dxo-master-detail
         [enabled]="true"

@@ -20,6 +20,32 @@ export interface CompanyInfo {
   finnhubIndustry: string;
 }
 
+export interface QuoteInfo {
+  // Current price
+  c: number;
+
+  // Change
+  d: number;
+
+  // Percent change
+  dp: number;
+
+  // High price of the day
+  h: number;
+
+  // Low price of the day
+  l: number;
+
+  // Open price of the day
+  o: number;
+
+  // Previous close price
+  pc: number;
+
+  // Time
+  t: number;
+}
+
 export interface CandleInfo {
   // Timestamp for returned candle.
   t: Date;
@@ -66,3 +92,39 @@ export interface GetSymbolsResponse {
 }
 
 export type StockResolution = '1' | '5' | '15' | '30' | '60' | 'D' | 'W' | 'M';
+
+export enum StockInfoWebsocketEvent {
+  PriceChange = 'price-change',
+}
+
+export type StockInfoWebsocketEventMessage<E extends StockInfoWebsocketEvent> =
+  E extends StockInfoWebsocketEvent.PriceChange
+    ? StockInfoPriceChangeMessage
+    : never;
+
+export type StockInfoWebsocketEventPayload<E extends StockInfoWebsocketEvent> =
+  E extends StockInfoWebsocketEvent.PriceChange
+    ? StockInfoPriceChangePayload
+    : never;
+
+export interface StockInfoPriceChangeMessage {
+  type: 'subscribe';
+  symbol: string;
+}
+
+export interface StockInfoPriceChangePayload {
+  type: string;
+  data: Array<{
+    // Symbol
+    s: string;
+
+    // Last price
+    p: number;
+
+    // UNIX milliseconds timestamp.
+    t: number;
+
+    // Volume
+    v: number;
+  }>;
+}

@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DxDataGridModule } from 'devextreme-angular';
 import { CompanyInfoModule } from './components/company-info/company-info.module';
 import { CandlesModule } from './components/candles/candles.module';
+import { PriceUpdatesModule } from './components/price-updates/price-updates.module';
 
 @NgModule({
   declarations: [StockInfoComponent],
@@ -14,6 +15,7 @@ import { CandlesModule } from './components/candles/candles.module';
     DxDataGridModule,
     CompanyInfoModule,
     CandlesModule,
+    PriceUpdatesModule,
   ],
   exports: [StockInfoComponent],
 })

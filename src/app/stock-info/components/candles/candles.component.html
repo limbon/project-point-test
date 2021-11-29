@@ -28,12 +28,11 @@
   </div>
 </div>
 
-<dx-chart
-  id="stock-candles"
-  [dataSource]="data"
-  [title]="title || symbol"
-  [loadingIndicator]="{ enabled: true }"
->
+<dx-chart id="stock-candles" [dataSource]="data" [title]="title || symbol">
+  <dxo-loading-indicator
+    [enabled]="true"
+    [(show)]="loading"
+  ></dxo-loading-indicator>
   <dxi-series
     [name]="symbol"
     openValueField="o"

@@ -6,6 +6,7 @@ import {
   CandleInfoResponse,
   CompanyInfo,
   GetSymbolsResponse,
+  QuoteInfo,
   StockResolution,
 } from '../stock-info.interface';
 
@@ -35,6 +36,15 @@ export class StockInfoService {
         },
       }
     );
+  }
+
+  getQuoteForSymbol(symbol: string) {
+    return this.httpClient.get<QuoteInfo>('https://finnhub.io/api/v1/quote', {
+      params: {
+        token: environment.finnhubApiKey,
+        symbol,
+      },
+    });
   }
 
   getCandlesForSymbol(

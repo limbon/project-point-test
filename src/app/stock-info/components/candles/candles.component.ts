@@ -43,7 +43,7 @@ export class CandlesComponent implements OnChanges {
     this.loading = true;
     this.stockInfoService
       .getCandlesForSymbol(
-        symbol.replace(/\..*/g, ''),
+        symbol,
         this.resolution,
         this.fromDate as Date,
         this.toDate as Date
